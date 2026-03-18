@@ -1,9 +1,20 @@
 {
+  "name": "claude-agents",
+  "description": "Custom agents marketplace",
+  "owner": {
+    "name": "trackness",
+    "email": "trackness@users.noreply.github.com"
+  },
   "plugins": [
     {
       "name": "kidcough-agents",
       "description": "Custom agents for kidcough project",
-      "source": "./"
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "trackness",
+        "email": "trackness@users.noreply.github.com"
+      }
     }
   ]
 }

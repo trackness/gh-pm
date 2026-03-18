@@ -1,5 +1,11 @@
 {
   "name": "kidcough-agents",
   "version": "1.0.0",
-  "description": "Custom agents for kidcough project"
+  "description": "Custom agents for kidcough project",
+  "author": {
+    "name": "trackness",
+    "email": "trackness@users.noreply.github.com"
+  },
+  "repository": "https://github.com/trackness/claude-agents",
+  "license": "MIT"
 }
