@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "kidcough-agents",
-      "description": "Custom agents for kidcough project",
+      "description": "Custom Claude Code agents",
       "version": "1.0.0",
       "source": "./",
       "author": {

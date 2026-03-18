@@ -1,7 +1,7 @@
 {
   "name": "kidcough-agents",
   "version": "1.0.0",
-  "description": "Custom agents for kidcough project",
+  "description": "Custom Claude Code agents",
   "author": {
     "name": "trackness",
     "email": "trackness@users.noreply.github.com"
