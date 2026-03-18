@@ -7,7 +7,7 @@
   },
   "plugins": [
     {
-      "name": "kidcough-agents",
+      "name": "trackness-agents",
       "description": "Custom Claude Code agents",
       "version": "1.0.0",
       "source": "./",
