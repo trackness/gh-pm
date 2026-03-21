@@ -1,0 +1,58 @@
+{
+  "github": {
+    "owner": "<owner>",
+    "repo": "<repo>",
+    "repositoryNodeId": "<repositoryNodeId>",
+    "project": {
+      "number": "<projectNumber>",
+      "nodeId": "<projectNodeId>",
+      "fields": {
+        "status": {
+          "id": "<statusFieldId>",
+          "options": {
+            "backlog": "<statusBacklogId>",
+            "ready": "<statusReadyId>",
+            "inProgress": "<statusInProgressId>",
+            "done": "<statusDoneId>",
+            "wontDo": "<statusWontDoId>"
+          }
+        },
+        "priority": {
+          "id": "<priorityFieldId>",
+          "options": {
+            "critical": "<priorityCriticalId>",
+            "high": "<priorityHighId>",
+            "medium": "<priorityMediumId>",
+            "low": "<priorityLowId>",
+            "lowest": "<priorityLowestId>"
+          }
+        },
+        "effort": {
+          "id": "<effortFieldId>",
+          "options": {
+            "trivial": "<effortTrivialId>",
+            "low": "<effortLowId>",
+            "medium": "<effortMediumId>",
+            "high": "<effortHighId>",
+            "highest": "<effortHighestId>"
+          }
+        },
+        "type": {
+          "id": "<typeFieldId>",
+          "options": {
+            "feat": "<typeFeatId>",
+            "fix": "<typeFixId>",
+            "chore": "<typeChoreId>",
+            "refactor": "<typeRefactorId>"
+          }
+        }
+      }
+    }
+  },
+  "testCommand": "<testCommand>",
+  "labels": [
+    "security", "infrastructure", "testing", "reliability",
+    "ux", "accessibility", "devops", "documentation",
+    "performance", "architecture", "feature", "production"
+  ]
+}

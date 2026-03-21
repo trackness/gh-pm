@@ -1,0 +1,6 @@
+mutation {
+  linkProjectV2ToRepository(input: {
+    projectId: "<projectNodeId>",
+    repositoryId: "<repositoryNodeId>"
+  }) { repository { id } }
+}

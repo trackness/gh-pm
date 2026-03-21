@@ -1,6 +1,6 @@
 {
   "name": "claude-agents",
-  "description": "Custom agents marketplace",
+  "description": "Project management workflows, enforcement hooks, and agents",
   "owner": {
     "name": "trackness",
     "email": "trackness@users.noreply.github.com"
@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "trackness-agents",
-      "description": "Custom Claude Code agents",
-      "version": "1.0.0",
+      "description": "Project management workflows, enforcement hooks, and PR reviewer agent",
+      "version": "2.0.0",
       "source": "./",
       "author": {
         "name": "trackness",
