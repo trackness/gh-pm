@@ -1,0 +1,8 @@
+mutation {
+  createLinkedBranch(input: {
+    issueId: "<issueNodeId>",
+    name: "<branchName>",
+    oid: "<commitSha>",
+    repositoryId: "<repositoryNodeId>"
+  }) { linkedBranch { id } }
+}

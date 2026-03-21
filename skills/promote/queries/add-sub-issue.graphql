@@ -1,0 +1,6 @@
+mutation {
+  addSubIssue(input: {
+    issueId: "<parentIssueNodeId>",
+    subIssueId: "<childIssueNodeId>"
+  }) { issue { id } }
+}

@@ -1,0 +1,14 @@
+mutation {
+  createProjectV2Field(input: {
+    projectId: "<projectNodeId>",
+    dataType: SINGLE_SELECT,
+    name: "Effort",
+    singleSelectOptions: [
+      { name: "Trivial", color: GRAY, description: "Minimal change, near-zero complexity" },
+      { name: "Low", color: BLUE, description: "Small, well-understood change" },
+      { name: "Medium", color: YELLOW, description: "Moderate scope, some design decisions" },
+      { name: "High", color: ORANGE, description: "Substantial scope, significant implementation work" },
+      { name: "Highest", color: RED, description: "Very large scope; consider breaking into sub-issues" }
+    ]
+  }) { projectV2Field { ... on ProjectV2SingleSelectField { id options { id name } } } }
+}

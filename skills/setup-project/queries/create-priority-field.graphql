@@ -1,0 +1,14 @@
+mutation {
+  createProjectV2Field(input: {
+    projectId: "<projectNodeId>",
+    dataType: SINGLE_SELECT,
+    name: "Priority",
+    singleSelectOptions: [
+      { name: "Critical", color: RED, description: "Must be done immediately" },
+      { name: "High", color: ORANGE, description: "Important, do soon" },
+      { name: "Medium", color: YELLOW, description: "Normal priority" },
+      { name: "Low", color: BLUE, description: "Nice to have" },
+      { name: "Lowest", color: GRAY, description: "Someday/maybe" }
+    ]
+  }) { projectV2Field { ... on ProjectV2SingleSelectField { id options { id name } } } }
+}

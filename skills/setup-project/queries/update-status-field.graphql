@@ -1,0 +1,13 @@
+mutation {
+  updateProjectV2Field(input: {
+    projectId: "<projectNodeId>",
+    fieldId: "<statusFieldId>",
+    singleSelectOptions: [
+      { name: "Backlog", color: GRAY, description: "Not yet scoped" },
+      { name: "Ready", color: BLUE, description: "Fully specified, ready to implement" },
+      { name: "In Progress", color: YELLOW, description: "Currently being worked on" },
+      { name: "Done", color: GREEN, description: "Completed and merged" },
+      { name: "Won't Do", color: RED, description: "Decided against" }
+    ]
+  }) { projectV2Field { ... on ProjectV2SingleSelectField { id options { id name } } } }
+}

@@ -1,0 +1,6 @@
+mutation {
+  addBlockedBy(input: {
+    issueId: "<issueNodeId>",
+    blockingIssueId: "<blockingIssueNodeId>"
+  }) { issue { id } }
+}

@@ -1,0 +1,238 @@
+---
+name: setup-project
+description: Bootstrap a new repository with GitHub Project, labels, config, and standard workflow infrastructure. Run once per repo.
+disable-model-invocation: true
+---
+
+# Setup Project
+
+Bootstrap a repository with the full trackness workflow infrastructure: GitHub Project with standard fields, labels, local config, and starter CLAUDE.md.
+
+Run this once per new repo. Idempotent — safe to re-run; skips anything that already exists.
+
+## Workflow
+
+### Phase 1: Prerequisites (fail fast)
+
+**Step 1: Check system dependencies**
+
+```bash
+gh --version
+jq --version
+task --version
+lefthook version
+```
+
+Collect all missing tools. If any are missing, print a single command:
+```
+Missing dependencies. Install with: brew install <missing tools>
+```
+Stop. Do not proceed.
+
+**Step 2: Check GitHub authentication and token scopes**
+
+```bash
+gh auth status
+```
+
+Required scopes: `project`, `repo`, `read:org`. Check the output for these. If any are missing, print:
+```
+Missing GitHub token scopes. Run: gh auth refresh -s project,repo,read:org
+```
+Stop. Do not proceed.
+
+**Step 3: Detect or create repository**
+
+Check if the current directory is a git repo with a GitHub remote:
+
+```bash
+gh repo view --json owner,name,id
+```
+
+If this succeeds, capture `owner`, `name`, and `id` (the repository node ID).
+
+If this fails (no git repo or no GitHub remote):
+1. Derive the repo name from the current directory name (`basename "$PWD"`)
+2. Detect the GitHub owner from `gh auth status` (authenticated user)
+3. `git init` if not already a git repo
+4. Create the GitHub repo: `gh repo create <owner>/<dir-name> --private --source . --push`
+5. Capture `owner`, `name`, and `id` from the newly created repo
+
+**Step 4: Check plugins**
+
+Check both plugins are installed:
+1. `trackness-agents@claude-agents`
+2. `superpowers-extended-cc@superpowers-extended-cc-marketplace`
+
+For each missing plugin, offer to install:
+```bash
+claude plugin install <plugin-name>
+```
+
+If the user declines, warn that workflows will be incomplete but continue.
+
+### Phase 2: GitHub Project
+
+**Step 5: Check for existing project**
+
+```bash
+gh project list --owner <owner> --format json
+```
+
+Look for an existing project linked to this repo. If found, ask the user: "Found existing project '<name>'. Use it? (y/n)". If yes, capture its number and node ID and skip to step 10. If no, create a new one.
+
+**Step 6: Create the GitHub Project**
+
+```bash
+gh project create --owner <owner> --title "<Repo Name> Backlog" --format json
+```
+
+Capture the project number and node ID.
+
+**Step 7: Configure Status field**
+
+Status is a built-in field. Query the project to get the Status field ID and its default options:
+
+```bash
+gh project field-list <number> --owner <owner> --format json
+```
+
+The standard Status options are:
+1. Backlog
+2. Ready
+3. In Progress
+4. Done
+5. Won't Do
+
+Add any missing options and capture all option IDs. Use the mutation at `${CLAUDE_SKILL_DIR}/queries/update-status-field.graphql`. Substitute the project node ID and status field ID.
+
+**Step 8: Create Priority field**
+
+Use the mutation at `${CLAUDE_SKILL_DIR}/queries/create-priority-field.graphql`. Substitute the project node ID. Capture field ID and all option IDs.
+
+**Step 9: Create Effort field**
+
+Use the mutation at `${CLAUDE_SKILL_DIR}/queries/create-effort-field.graphql`. Substitute the project node ID. Capture field ID and all option IDs.
+
+**Step 10: Create Type field**
+
+Use the mutation at `${CLAUDE_SKILL_DIR}/queries/create-type-field.graphql`. Substitute the project node ID. Capture field ID and all option IDs.
+
+**Step 11: Link project to repository**
+
+Use the mutation at `${CLAUDE_SKILL_DIR}/queries/link-project-to-repo.graphql`. Substitute the project node ID and repository node ID.
+
+### Phase 3: Labels
+
+**Step 12: Create standard labels**
+
+Create each label on the repo. Skip any that already exist (gh returns an error for duplicates — treat as success).
+
+```bash
+gh label create security     --color "d73a49" --description "Auth, validation, CORS, XSS, injection" 2>/dev/null
+gh label create infrastructure --color "0075ca" --description "Server setup, health checks, config, database" 2>/dev/null
+gh label create testing      --color "e4e669" --description "Unit, integration, E2E tests" 2>/dev/null
+gh label create reliability  --color "f9d0c4" --description "Retry logic, logging, migrations, backups" 2>/dev/null
+gh label create ux           --color "c5def5" --description "Interactions, keyboard, mobile, polish" 2>/dev/null
+gh label create accessibility --color "bfd4f2" --description "ARIA, screen readers, WCAG" 2>/dev/null
+gh label create devops       --color "d4c5f9" --description "CI/CD, Docker, deployment, tooling" 2>/dev/null
+gh label create documentation --color "0075ca" --description "Docs, README, guides, workflow" 2>/dev/null
+gh label create performance  --color "fbca04" --description "Speed, caching, optimisation" 2>/dev/null
+gh label create architecture --color "5319e7" --description "Code structure, design patterns, significant refactoring" 2>/dev/null
+gh label create feature      --color "a2eeef" --description "Net-new user-facing capabilities" 2>/dev/null
+gh label create production   --color "b60205" --description "Rate limiting, graceful shutdown, error reporting" 2>/dev/null
+```
+
+### Phase 4: Local Configuration
+
+**Step 13: Detect test command**
+
+Check in order:
+
+1. **Taskfile.yml / Taskfile.yaml** — parse for a `test` task. If found → `task test`
+2. **package.json** — check for `test` script in `scripts`. If found, detect package manager:
+   - `pnpm-lock.yaml` exists → `pnpm test`
+   - `yarn.lock` exists → `yarn test`
+   - `bun.lockb` exists → `bun test`
+   - otherwise → `npm test`
+3. **go.mod** → `go test ./...`
+4. **Cargo.toml** → `cargo test`
+5. **pyproject.toml** → `uv run pytest`
+6. **Nothing found** — ask the user: "Could not detect test command. What command runs your tests?"
+
+**Step 14: Create .claude/ directory**
+
+```bash
+mkdir -p .claude
+```
+
+**Step 15: Write .claude/project.json**
+
+Read the template from `${CLAUDE_SKILL_DIR}/templates/project.json`. Substitute all placeholders with the actual values captured during setup (owner, repo, repository node ID, project number/node ID, all field IDs, all option IDs, test command). Note that `project.number` must be written as a number, not a string. Write the result to `.claude/project.json`.
+
+**Step 16: Generate starter CLAUDE.md**
+
+Only create if CLAUDE.md does not already exist. If it exists, skip with a message.
+
+Read the template from `${CLAUDE_SKILL_DIR}/templates/CLAUDE.md`. Substitute `{number}`, `{owner}`, and `{testCommand}` with the actual values from the setup results. Write the result to `CLAUDE.md` in the repo root.
+
+**Step 17: Update .gitignore**
+
+Append `.claude/settings.local.json` to `.gitignore` if not already present:
+
+```bash
+grep -q 'settings.local.json' .gitignore 2>/dev/null || echo '.claude/settings.local.json' >> .gitignore
+```
+
+### Phase 5: Post-setup
+
+**Step 18: Print summary**
+
+```
+Setup complete:
+  Project: <owner>/<repo> Backlog (#<number>)
+  Fields:  Status (5 options), Priority (5), Effort (5), Type (4)
+  Labels:  12 created
+  Config:  .claude/project.json
+  Docs:    CLAUDE.md (starter)
+  Test:    <test-command>
+
+Files written (unstaged — review before committing):
+  .claude/project.json
+  CLAUDE.md
+  .gitignore
+```
+
+**Step 19: Check global CLAUDE.md**
+
+```bash
+test -f ~/.claude/CLAUDE.md
+```
+
+If missing, print:
+```
+Note: No global ~/.claude/CLAUDE.md found. Consider creating one
+for behavioral rules that apply across all your repos.
+```
+
+**Step 20: Leave files unstaged**
+
+Do not commit. The user reviews first.
+
+## Idempotency
+
+Every step checks before creating:
+1. Project exists → reuse (with confirmation)
+2. Field exists → skip, capture ID
+3. Label exists → skip
+4. `.claude/` exists → skip mkdir
+5. `project.json` exists → overwrite (it's generated config)
+6. `CLAUDE.md` exists → skip (never overwrite user content)
+7. `.gitignore` entry exists → skip
+
+## Error Recovery
+
+If the skill fails partway through:
+1. Re-running is safe due to idempotency
+2. Partial GitHub Project state is fine — missing fields get created on re-run
+3. Print what was completed and what failed so the user knows the state

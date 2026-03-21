@@ -1,0 +1,13 @@
+mutation {
+  createProjectV2Field(input: {
+    projectId: "<projectNodeId>",
+    dataType: SINGLE_SELECT,
+    name: "Type",
+    singleSelectOptions: [
+      { name: "feat", color: GREEN, description: "New user-facing feature" },
+      { name: "fix", color: RED, description: "Bug fix" },
+      { name: "chore", color: GRAY, description: "Tooling, config, documentation, workflow" },
+      { name: "refactor", color: BLUE, description: "Code restructuring without behaviour change" }
+    ]
+  }) { projectV2Field { ... on ProjectV2SingleSelectField { id options { id name } } } }
+}
