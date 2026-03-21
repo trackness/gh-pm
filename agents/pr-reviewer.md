@@ -15,16 +15,31 @@ Conduct a **comprehensive, autonomous review** of all changes in the current pul
 
 ## Review Process
 
-### 1. Investigation Phase (use tools extensively)
+### 1. Stack Detection Phase
+Before reviewing, detect the project's technology stack by checking for these files in the repository root:
+
+| File | Stack | Reference to load |
+|------|-------|--------------------|
+| `package.json` or `tsconfig.json` | TypeScript / React / Node.js | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-typescript.md` |
+| `go.mod` | Go | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-go.md` |
+| `Cargo.toml` | Rust | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-rust.md` |
+| `pyproject.toml`, `setup.py`, or `requirements.txt` | Python | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-python.md` |
+| `Dockerfile` or `docker-compose.yml` | Docker | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/infra-docker.md` |
+
+Use `Glob` to check which of these files exist. Then use `Read` to load **all** matching reference files — a project may use multiple stacks. Apply the criteria from loaded references during the Deep Analysis phase.
+
+### 2. Investigation Phase (use tools extensively)
 - Run `git diff` to see all changes against the base branch
 - Run `git log` to understand commit history and context
 - Use `Read` tool to read ALL modified files completely (not just the diff)
 - Use `Grep` to search for related code patterns that might be affected
 - Use `Glob` to find test files, config files, and related modules
-- Check `package.json` for new/updated dependencies
+- Check for new/updated dependencies in the relevant manifest files
 - Look for configuration changes (Docker, CI/CD, environment variables)
 
-### 2. Deep Analysis
+### 3. Deep Analysis
+
+Apply the criteria from all loaded reference files alongside the universal review criteria below.
 
 **Security Review**
 - SQL injection vulnerabilities (raw queries, unsanitized input)
@@ -48,7 +63,7 @@ Conduct a **comprehensive, autonomous review** of all changes in the current pul
 **Performance**
 - Database N+1 query problems
 - Missing indexes on queries
-- Unnecessary re-renders (React)
+- Unnecessary computation or re-renders
 - Memory leaks (event listeners, subscriptions, closures)
 - Inefficient algorithms (O(n²) when O(n) possible)
 - Bundle size increases
@@ -57,10 +72,10 @@ Conduct a **comprehensive, autonomous review** of all changes in the current pul
 - Blocking operations on critical paths
 
 **Error Handling & Reliability**
-- Try-catch blocks around async operations
-- Promise rejection handling
+- Error handling around fallible operations (try-catch, Result types, error returns)
+- Unhandled async failures
 - Input validation
-- Edge case handling (null, undefined, empty arrays, etc.)
+- Edge case handling (null, empty collections, boundary values, etc.)
 - Race conditions
 - Error messages quality (useful for debugging?)
 - Graceful degradation
@@ -80,47 +95,9 @@ Conduct a **comprehensive, autonomous review** of all changes in the current pul
 - Consistent code style
 - Magic numbers/strings
 - Dead code removal
-- Console.log or debug statements left in
+- Debug statements left in (console.log, print, dbg!, println!, etc.)
 
-**Technology-Specific**
-
-*React/Frontend:*
-- Component design and composition
-- Hook dependencies and cleanup
-- State management appropriateness
-- Accessibility (a11y) - semantic HTML, ARIA labels, keyboard navigation
-- Prop types/TypeScript types
-- Key props in lists
-- useEffect dependencies and cleanup
-
-*Node.js/Backend:*
-- Async/await vs callbacks
-- Middleware order (CRITICAL - especially auth before routes)
-- Request validation
-- Response status codes
-- API versioning
-- Rate limiting
-- Database connection handling
-- Stream handling for large data
-- TypeScript: implicit `any`, missing return types, unsafe type assertions (`as`, `!`), `unknown` vs `any`, strict null checks, proper interface/type definitions
-
-*Docker:*
-- Multi-stage builds
-- Layer caching optimization
-- Image size
-- Security (running as non-root, minimal base images)
-- .dockerignore usage
-- Health checks
-
-*Database:*
-- Migration safety (reversible, no data loss)
-- Index creation for queries
-- Query optimization
-- Transaction usage
-- Constraint enforcement
-- Data type appropriateness
-
-### 3. Deliver Comprehensive Feedback
+### 4. Deliver Comprehensive Feedback
 
 Organize findings by **severity**:
 
@@ -137,7 +114,7 @@ For each issue provide:
 4. **Solution**: Specific fix with code example when helpful
 5. **Reasoning**: Technical justification
 
-### 4. Provide Summary
+### 5. Provide Summary
 
 **Overall Assessment**: Choose one:
 - ✅ **APPROVE** - Ready to merge, excellent work
