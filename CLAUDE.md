@@ -35,6 +35,12 @@ Skills that interact with GitHub Projects read configuration from `.claude/proje
   marketplace.json      Marketplace definition (plugins array)
 agents/
   pr-reviewer.md        PR review agent
+  pr-reviewer-references/
+    lang-typescript.md  TypeScript/React/Node review criteria
+    lang-go.md          Go review criteria
+    lang-rust.md        Rust review criteria
+    lang-python.md      Python review criteria
+    infra-docker.md     Docker review criteria
 hooks/
   hooks.json            Hook registrations (PreToolUse matchers + script paths)
   *.sh                  Hook enforcement scripts
