@@ -106,6 +106,8 @@ The standard Status options are:
 
 Add any missing options and capture all option IDs. Use the mutation at `${CLAUDE_SKILL_DIR}/queries/update-status-field.graphql`. Substitute the project node ID and status field ID.
 
+**Warning:** This mutation replaces all existing Status options. If the project has custom statuses beyond the standard 5, they will be lost. Fetch existing options first and verify before running.
+
 **Step 8: Create Priority field**
 
 Use the mutation at `${CLAUDE_SKILL_DIR}/queries/create-priority-field.graphql`. Substitute the project node ID. Capture field ID and all option IDs.

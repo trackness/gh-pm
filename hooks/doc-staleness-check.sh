@@ -10,9 +10,9 @@ echo "$COMMAND" | grep -q 'gh pr create' || exit 0
 
 cd "$CWD" 2>/dev/null || exit 0
 
-# Get the diff against main (or master)
-BASE_BRANCH="main"
-git rev-parse --verify "$BASE_BRANCH" >/dev/null 2>&1 || BASE_BRANCH="master"
+# Get the diff against origin/main (or origin/master) to avoid stale local branch
+BASE_BRANCH="origin/main"
+git rev-parse --verify "$BASE_BRANCH" >/dev/null 2>&1 || BASE_BRANCH="origin/master"
 git rev-parse --verify "$BASE_BRANCH" >/dev/null 2>&1 || exit 0
 
 DIFF_OUTPUT=$(git diff "$BASE_BRANCH"...HEAD --name-status 2>/dev/null)

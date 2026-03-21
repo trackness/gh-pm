@@ -6,7 +6,10 @@ PROMPT=$(echo "$INPUT" | jq -r '.tool_input.prompt // ""')
 DESCRIPTION=$(echo "$INPUT" | jq -r '.tool_input.description // ""')
 SUBAGENT_TYPE=$(echo "$INPUT" | jq -r '.tool_input.subagent_type // ""')
 
-# Check if this is a PR/pull review related agent call
+# Best-effort keyword detection for PR review agent calls.
+# This is heuristic — it matches common phrasings but cannot catch all ways
+# a PR review might be described. The hook errs on the side of catching
+# obvious cases rather than attempting to match every possible phrasing.
 COMBINED="$PROMPT $DESCRIPTION"
 IS_PR_REVIEW=false
 

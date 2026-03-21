@@ -41,7 +41,7 @@ Enforcement hooks that block tool calls mechanically. Claude cannot bypass these
 | `doc-staleness-check.sh` | `gh pr create` when substantive changes lack doc updates | Bash |
 | `enforce-agent-model.sh` | Agent calls with `model: "haiku"` | Agent |
 | `enforce-pr-reviewer.sh` | PR review agents that aren't `trackness-agents:pr-reviewer` | Agent |
-| `enforce-memory-approval.sh` | Direct writes to memory directory without user approval | Write |
+| `enforce-memory-approval.sh` | Prompts for approval on writes to memory directory | Write |
 
 ## Project Configuration
 

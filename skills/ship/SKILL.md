@@ -35,7 +35,7 @@ Extract and hold in context:
 4. **Clean up stale artifacts:**
    - Delete all files in `docs/superpowers/plans/` (both `.md` plans and `.tasks.json` companions)
    - Delete all files in `docs/superpowers/specs/` (design specs consumed during implementation)
-   - Both are stale artifacts by the time `/ship` runs
+   - These paths are created by the `superpowers-extended-cc` plugin's planning and spec skills. If these directories don't exist, skip this step entirely.
    - If both directories are already empty, skip this step
    - Commit the deletions with message `chore: remove stale plan and spec files`
 
