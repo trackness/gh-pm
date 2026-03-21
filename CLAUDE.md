@@ -41,6 +41,7 @@ agents/
     lang-rust.md        Rust review criteria
     lang-python.md      Python review criteria
     infra-docker.md     Docker review criteria
+    infra-database.md   Database review criteria
 hooks/
   hooks.json            Hook registrations (PreToolUse matchers + script paths)
   *.sh                  Hook enforcement scripts
