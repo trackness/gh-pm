@@ -9,7 +9,7 @@
     {
       "name": "trackness-agents",
       "description": "Project management workflows, enforcement hooks, and PR reviewer agent",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "source": "./",
       "author": {
         "name": "trackness",
