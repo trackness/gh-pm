@@ -18,13 +18,13 @@ Conduct a **comprehensive, autonomous review** of all changes in the current pul
 ### 1. Stack Detection Phase
 Before reviewing, detect the project's technology stack by checking for these files in the repository root:
 
-| File | Stack | Reference to load |
-|------|-------|--------------------|
-| `package.json` or `tsconfig.json` | TypeScript / React / Node.js | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-typescript.md` |
-| `go.mod` | Go | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-go.md` |
-| `Cargo.toml` | Rust | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-rust.md` |
-| `pyproject.toml`, `setup.py`, or `requirements.txt` | Python | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-python.md` |
-| `Dockerfile` or `docker-compose.yml` | Docker | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/infra-docker.md` |
+| File                                                | Stack                        | Reference to load                                                        |
+|-----------------------------------------------------|------------------------------|--------------------------------------------------------------------------|
+| `package.json` or `tsconfig.json`                   | TypeScript / React / Node.js | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-typescript.md` |
+| `go.mod`                                            | Go                           | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-go.md`         |
+| `Cargo.toml`                                        | Rust                         | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-rust.md`       |
+| `pyproject.toml`, `setup.py`, or `requirements.txt` | Python                       | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/lang-python.md`     |
+| `Dockerfile` or `docker-compose.yml`                | Docker                       | `${CLAUDE_PLUGIN_ROOT}/agents/pr-reviewer-references/infra-docker.md`    |
 
 Use `Glob` to check which of these files exist. Then use `Read` to load **all** matching reference files — a project may use multiple stacks. Apply the criteria from loaded references during the Deep Analysis phase.
 
