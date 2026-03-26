@@ -142,7 +142,7 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    A[/task n] --> B[Read project.json]
+    A["/task n"] --> B[Read project.json]
     B --> C[Find issue on board]
     C --> D{Dependencies satisfied?}
     D -- No --> E[Stop: implement prerequisite]
@@ -154,14 +154,14 @@ flowchart TD
     I --> J
     J --> K[Verify against acceptance criteria]
     K --> L[Documentation check]
-    L --> M[/ship]
+    L --> M["/ship"]
 ```
 
 ### /ship Flow
 
 ```mermaid
 flowchart TD
-    A[/ship] --> B{On main?}
+    A["/ship"] --> B{On main?}
     B -- Yes --> C[STOP: create branch first]
     B -- No --> D[Run tests]
     D -- Fail --> E[Debug + fix]
@@ -185,7 +185,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[/promote n] --> B[Fetch backlog issue]
+    A["/promote n"] --> B[Fetch backlog issue]
     B --> C[Research: read code, find related issues]
     C --> D[Brainstorm via superpowers skill]
     D --> E[Draft full spec]
@@ -202,7 +202,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[/audit] --> B[Read CLAUDE.md + all project items]
+    A["/audit"] --> B[Read CLAUDE.md + all project items]
     B --> C[Read entire codebase]
     C --> D[11-dimension gap analysis]
     D --> E[Cross-reference existing issues]
