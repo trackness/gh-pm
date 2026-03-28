@@ -39,7 +39,7 @@ HAS_SUBSTANTIVE=false
 # Go: _test.go
 # Python: test_*.py, *_test.py, tests/, conftest.py
 # Rust: tests/ (already caught by test pattern)
-TEST_PATTERN='(/test/|/spec/|/__tests__/|_test\.|test_|\.test\.|\.spec\.|/conftest\.)'
+TEST_PATTERN='(/test/|/spec/|/__tests__/|_test\.|/test_|\.test\.|\.spec\.|/conftest\.)'
 
 # Added or modified files (excluding tests and doc files)
 if echo "$DIFF_OUTPUT" | grep -E '^[AM]\s' | grep -vE "(${TEST_PATTERN}|CLAUDE\.md|README|docs/)" | grep -q .; then
