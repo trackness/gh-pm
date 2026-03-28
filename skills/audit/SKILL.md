@@ -21,7 +21,7 @@ Extract and hold in context:
 ## Workflow
 
 1. **Read current state:**
-   - Read CLAUDE.md — understand project context, tag list, effort scale, and issue body template
+   - Read CLAUDE.md — understand what the project does and its tech stack
    - Fetch all project items: `gh project item-list <project.number> --owner <owner> --limit 200 --format json` — note all items across all statuses (Ready, In Progress, Done, Won't Do, Backlog)
    - Fetch all open GitHub issues: `gh issue list --state open --limit 200 --json number,title,labels` — these are already tracked; do not duplicate them
    - Glob the entire repository for source files — read everything relevant (source, tests, config, Dockerfiles, package.json files, migrations, docs, etc.)

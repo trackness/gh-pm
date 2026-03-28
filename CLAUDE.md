@@ -66,7 +66,7 @@ skills/
 3. Hook scripts must exit 0 for allow, or output deny JSON. Never exit with other codes unless it's a non-blocking error.
 4. Test every hook with sample JSON input before committing. Example: `echo '{"tool_input":{"command":"git commit -m test"},"cwd":"/tmp/test"}' | ./hooks/no-commit-main.sh`
 5. Skills reference `<project.number>`, `<project.nodeId>`, `<fields.status.id>` etc. as placeholders — these are resolved at runtime from `.claude/project.json` in the consumer repo. Never hardcode GitHub IDs.
-6. The `pr-reviewer.md` agent in this repo is the source of truth. Consumer repos (like kidcough) may have a local copy in `.claude/agents/` — keep them in sync.
+6. The `pr-reviewer.md` agent in this repo is the source of truth. Consumer repos may have a local copy in `.claude/agents/` — keep them in sync.
 7. Bump the version in BOTH `plugin.json` and `marketplace.json` before pushing. If versions don't match, consumers may not pick up updates.
 
 ## Versioning

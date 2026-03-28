@@ -1,5 +1,5 @@
 #!/bin/bash
-# Block git commit on main/master (but allow --amend)
+# Block git commit on the default branch (but allow --amend)
 
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // ""')
@@ -31,14 +31,33 @@ EOF
   exit 0
 fi
 
-if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
-  cat <<'EOF'
+# Detect the default branch
+DEFAULT_BRANCH=""
+if [ -n "$CWD" ]; then
+  DEFAULT_BRANCH=$(cd "$CWD" 2>/dev/null && git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+  if [ -z "$DEFAULT_BRANCH" ]; then
+    DEFAULT_BRANCH=$(cd "$CWD" 2>/dev/null && gh repo view --json defaultBranchRef --jq .defaultBranchRef.name 2>/dev/null)
+  fi
+fi
+
+# Fall back to main/master if detection fails
+if [ -z "$DEFAULT_BRANCH" ]; then
+  if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+    DEFAULT_BRANCH="$BRANCH"
+  else
+    cat <<'EOF'
 {
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": "Cannot commit directly to main. Create a feature branch first."
+    "permissionDecision": "ask",
+    "permissionDecisionReason": "Could not detect the default branch. Confirm this commit is not to the default branch."
   }
 }
 EOF
+    exit 0
+  fi
+fi
+
+if [ "$BRANCH" = "$DEFAULT_BRANCH" ]; then
+  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "PreToolUse",\n    "permissionDecision": "deny",\n    "permissionDecisionReason": "Cannot commit directly to %s. Create a feature branch first."\n  }\n}\n' "$DEFAULT_BRANCH"
 fi
