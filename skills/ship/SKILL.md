@@ -21,7 +21,8 @@ Extract and hold in context:
 ## Workflow
 
 1. **Check current state:**
-   - **HARD GATE:** If on main branch, STOP. Check whether bad commits exist on main (commits that should be on a feature branch). If so, warn the user and present the situation: which commits are on main, whether they've been pushed, and what the options are (`git reset --hard` + `git push --force-with-lease` for unpushed, or revert for pushed). **Do not execute any destructive operation without explicit user confirmation.** Once resolved, create a feature branch before doing anything else. No commits to main — ever.
+   - **Detect default branch:** Run `git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'`. If that fails, run `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`. Store the result as `DEFAULT_BRANCH`.
+   - **HARD GATE:** If on the default branch, STOP. Check whether bad commits exist on main (commits that should be on a feature branch). If so, warn the user and present the situation: which commits are on main, whether they've been pushed, and what the options are (`git reset --hard` + `git push --force-with-lease` for unpushed, or revert for pushed). **Do not execute any destructive operation without explicit user confirmation.** Once resolved, create a feature branch before doing anything else. No commits to main — ever.
    - If uncommitted changes exist, create a commit with an appropriate message based on the changes
 
 2. **Run tests:**
@@ -30,7 +31,7 @@ Extract and hold in context:
    - If all tests pass: proceed
 
 3. **Documentation gate:**
-   - **HARD GATE:** Check whether the branch changes the tech stack, adds/removes dependencies, changes file structure, deletes/renames files, or otherwise invalidates existing documentation. If so, update all affected docs (CLAUDE.md, README, ADRs, issue templates, workflow docs) before proceeding. Stale docs do not ship.
+   - **HARD GATE:** Check whether the branch changes the tech stack, adds/removes dependencies, changes file structure, deletes/renames files, or otherwise invalidates existing documentation. If so, update any affected docs that exist in this repo (CLAUDE.md, README, ADRs, issue templates, workflow docs) before proceeding. Stale docs do not ship.
 
 4. **Clean up stale artifacts:**
    - Delete all files in `docs/superpowers/plans/` (both `.md` plans and `.tasks.json` companions)
@@ -74,5 +75,5 @@ Extract and hold in context:
 - Auto-generates PR descriptions based on commit history
 - Uses the pr-reviewer agent for comprehensive autonomous review
 - Ensures branch is deleted after successful merge
-- Returns to main branch after merge completes
+- Returns to the default branch after merge completes
 - **IMPORTANT:** Never add Claude Code attribution to commits, PRs, or any code

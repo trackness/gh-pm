@@ -69,7 +69,7 @@ Extract and hold in context:
 
 8. **Documentation check:**
    - Review what this task changed: new dependencies, deleted/renamed files, tech stack changes, workflow changes.
-   - Check all project documentation (CLAUDE.md, README, ADRs, workflow docs) for anything invalidated by these changes. Update now, on this branch, before shipping.
+   - Check any project documentation that exists in this repo (CLAUDE.md, README, ADRs, workflow docs) for anything invalidated by these changes. Update now, on this branch, before shipping.
 
 9. **Ship it:**
    - Use the /ship workflow
