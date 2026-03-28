@@ -45,18 +45,19 @@ if [ -z "$DEFAULT_BRANCH" ]; then
   if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
     DEFAULT_BRANCH="$BRANCH"
   else
+    cat <<'EOF'
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "ask",
+    "permissionDecisionReason": "Could not detect the default branch. Confirm this commit is not to the default branch."
+  }
+}
+EOF
     exit 0
   fi
 fi
 
 if [ "$BRANCH" = "$DEFAULT_BRANCH" ]; then
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PreToolUse",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": "Cannot commit directly to ${DEFAULT_BRANCH}. Create a feature branch first."
-  }
-}
-EOF
+  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "PreToolUse",\n    "permissionDecision": "deny",\n    "permissionDecisionReason": "Cannot commit directly to %s. Create a feature branch first."\n  }\n}\n' "$DEFAULT_BRANCH"
 fi

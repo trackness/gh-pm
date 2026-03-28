@@ -22,7 +22,7 @@ Extract and hold in context:
 
 1. **Check current state:**
    - **Detect default branch:** Run `git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'`. If that fails, run `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`. Store the result as `DEFAULT_BRANCH`.
-   - **HARD GATE:** If on the default branch, STOP. Check whether bad commits exist on main (commits that should be on a feature branch). If so, warn the user and present the situation: which commits are on main, whether they've been pushed, and what the options are (`git reset --hard` + `git push --force-with-lease` for unpushed, or revert for pushed). **Do not execute any destructive operation without explicit user confirmation.** Once resolved, create a feature branch before doing anything else. No commits to main — ever.
+   - **HARD GATE:** If on the default branch, STOP. Check whether bad commits exist on the default branch (commits that should be on a feature branch). If so, warn the user and present the situation: which commits are on the default branch, whether they've been pushed, and what the options are (`git reset --hard` + `git push --force-with-lease` for unpushed, or revert for pushed). **Do not execute any destructive operation without explicit user confirmation.** Once resolved, create a feature branch before doing anything else. No commits to the default branch — ever.
    - If uncommitted changes exist, create a commit with an appropriate message based on the changes
 
 2. **Run tests:**
