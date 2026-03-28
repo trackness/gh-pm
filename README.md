@@ -1,14 +1,14 @@
-# trackness-agents
+# gh-pm
 
 Claude Code plugin providing project management workflows, enforcement hooks, and a PR reviewer agent. Installed as a marketplace plugin — applies to all repos where enabled.
 
 ## Install
 
 ```bash
-claude plugin install trackness-agents@claude-agents
+claude plugin install gh-pm@trackness
 ```
 
-This registers the marketplace from `trackness/claude-agents` on GitHub and installs the plugin.
+This installs the plugin from the `trackness` marketplace (`trackness/claude-code-marketplace`).
 
 ## What's Included
 
@@ -40,7 +40,7 @@ Enforcement hooks that block tool calls mechanically. Claude cannot bypass these
 | `no-hook-bypass.sh` | `--no-verify` on any git command | Bash |
 | `doc-staleness-check.sh` | `gh pr create` when substantive changes lack doc updates | Bash |
 | `enforce-agent-model.sh` | Agent calls with `model: "haiku"` | Agent |
-| `enforce-pr-reviewer.sh` | PR review agents that aren't `trackness-agents:pr-reviewer` | Agent |
+| `enforce-pr-reviewer.sh` | PR review agents that aren't `gh-pm:pr-reviewer` | Agent |
 | `enforce-memory-approval.sh` | Prompts for approval on writes to memory directory | Write |
 
 ## Project Configuration
@@ -66,11 +66,10 @@ Claude Code plugins (must be enabled):
 ## Structure
 
 ```
-trackness-agents/
+gh-pm/
 │
 ├── .claude-plugin/
-│   ├── plugin.json                      # Plugin manifest (name, version)
-│   └── marketplace.json                 # Marketplace definition
+│   └── plugin.json                      # Plugin manifest (name, version)
 │
 ├── agents/
 │   └── pr-reviewer.md                   # PR review agent prompt
@@ -232,4 +231,4 @@ flowchart LR
 
 ## Versioning
 
-Bump the version in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` before pushing changes. Consumers pick up updates via `claude plugin update trackness-agents@claude-agents`.
+Bump the version in `.claude-plugin/plugin.json` before pushing changes. Also update the version in `trackness/claude-code-marketplace` marketplace.json to match. Consumers pick up updates via `claude plugin update gh-pm@trackness`.

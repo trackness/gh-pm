@@ -1,5 +1,5 @@
 #!/bin/bash
-# Block PR review Agent calls that don't use trackness-agents:pr-reviewer
+# Block PR review Agent calls that don't use gh-pm:pr-reviewer
 
 INPUT=$(cat)
 PROMPT=$(echo "$INPUT" | jq -r '.tool_input.prompt // ""')
@@ -22,13 +22,13 @@ if [ "$IS_PR_REVIEW" = false ]; then
 fi
 
 # If it's a PR review but not using the correct subagent type, block
-if [ "$SUBAGENT_TYPE" != "trackness-agents:pr-reviewer" ]; then
+if [ "$SUBAGENT_TYPE" != "gh-pm:pr-reviewer" ]; then
   cat <<'EOF'
 {
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "PR reviews MUST use subagent_type: trackness-agents:pr-reviewer."
+    "permissionDecisionReason": "PR reviews MUST use subagent_type: gh-pm:pr-reviewer."
   }
 }
 EOF

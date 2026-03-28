@@ -1,21 +1,21 @@
-# Claude Development Guide — trackness-agents plugin
+# Claude Development Guide — gh-pm plugin
 
 This is a Claude Code plugin, not a standalone application. It ships agents, hooks, and skills that apply to all repos where the plugin is enabled.
 
 ## What This Repo Is
 
-A Claude Code marketplace plugin (`trackness-agents@claude-agents`) containing:
+A Claude Code plugin (`gh-pm@trackness`) containing:
 
 1. **1 agent** — `pr-reviewer` in `agents/`
 2. **6 enforcement hooks** — shell scripts in `hooks/`, configured via `hooks/hooks.json`
 3. **5 skills** — markdown-driven workflows in `skills/*/SKILL.md`
 
-Consumers install via `claude plugin install trackness-agents@claude-agents`. The plugin is distributed from this GitHub repo as a marketplace.
+Consumers install via `claude plugin install gh-pm@trackness`. The marketplace lives in `trackness/claude-code-marketplace`; this repo is the plugin source.
 
 ## How Plugin Components Work
 
 ### Agents (`agents/*.md`)
-Markdown files with frontmatter (`name`, `description`). Claude Code discovers them automatically. Users invoke with `subagent_type: "trackness-agents:<agent-name>"`.
+Markdown files with frontmatter (`name`, `description`). Claude Code discovers them automatically. Users invoke with `subagent_type: "gh-pm:<agent-name>"`.
 
 ### Hooks (`hooks/hooks.json` + scripts)
 `hooks.json` registers PreToolUse hooks with matchers (Bash, Agent, Write). Each hook runs a shell script that receives tool call JSON on stdin and outputs a deny/allow decision. Exit 0 = allow. JSON with `permissionDecision: "deny"` = block.
@@ -23,7 +23,7 @@ Markdown files with frontmatter (`name`, `description`). Claude Code discovers t
 Hook scripts must be executable (`chmod +x`). They reference themselves via `${CLAUDE_PLUGIN_ROOT}/hooks/<script>.sh`.
 
 ### Skills (`skills/*/SKILL.md`)
-Each skill is a directory with a `SKILL.md` containing frontmatter (`name`, `description`) and the full skill prompt. Users invoke with `/trackness-agents:<skill-name>` or Claude invokes automatically based on context.
+Each skill is a directory with a `SKILL.md` containing frontmatter (`name`, `description`) and the full skill prompt. Users invoke with `/gh-pm:<skill-name>` or Claude invokes automatically based on context.
 
 Skills that interact with GitHub Projects read configuration from `.claude/project.json` in the consumer repo (created by `/setup-project`).
 
@@ -32,7 +32,6 @@ Skills that interact with GitHub Projects read configuration from `.claude/proje
 ```
 .claude-plugin/
   plugin.json           Name, version, metadata
-  marketplace.json      Marketplace definition (plugins array)
 agents/
   pr-reviewer.md        PR review agent
   pr-reviewer-references/
@@ -67,7 +66,7 @@ skills/
 4. Test every hook with sample JSON input before committing. Example: `echo '{"tool_input":{"command":"git commit -m test"},"cwd":"/tmp/test"}' | ./hooks/no-commit-main.sh`
 5. Skills reference `<project.number>`, `<project.nodeId>`, `<fields.status.id>` etc. as placeholders — these are resolved at runtime from `.claude/project.json` in the consumer repo. Never hardcode GitHub IDs.
 6. The `pr-reviewer.md` agent in this repo is the source of truth. Consumer repos may have a local copy in `.claude/agents/` — keep them in sync.
-7. Bump the version in BOTH `plugin.json` and `marketplace.json` before pushing. If versions don't match, consumers may not pick up updates.
+7. Bump the version in `plugin.json` before pushing. Also update the version in `trackness/claude-code-marketplace` marketplace.json to match.
 
 ## Versioning
 
@@ -76,7 +75,7 @@ This plugin uses semantic versioning:
 - **MINOR** — new skills, hooks, or agents; backward-compatible enhancements
 - **PATCH** — bug fixes to existing components
 
-Current version is in `.claude-plugin/plugin.json`. Must match `.claude-plugin/marketplace.json`.
+Current version is in `.claude-plugin/plugin.json`. Must match the version in `trackness/claude-code-marketplace` marketplace.json.
 
 ## Testing Changes
 
@@ -86,9 +85,9 @@ Current version is in `.claude-plugin/plugin.json`. Must match `.claude-plugin/m
    ```
    Verify: blocked commands produce deny JSON, allowed commands produce no output.
 
-2. **Skills:** Test by running the skill in a consumer repo. Use `claude --plugin-dir /path/to/claude-agents` for local testing without publishing.
+2. **Skills:** Test by running the skill in a consumer repo. Use `claude --plugin-dir /path/to/gh-pm` for local testing without publishing.
 
-3. **Agent:** Test by running a PR review in a consumer repo with `subagent_type: "trackness-agents:pr-reviewer"`.
+3. **Agent:** Test by running a PR review in a consumer repo with `subagent_type: "gh-pm:pr-reviewer"`.
 
 ## Dependencies
 
@@ -106,14 +105,14 @@ For the skills to work, each consumer repo needs:
 
 ## Marketplace Configuration
 
-This repo IS the marketplace. The marketplace definition in `.claude-plugin/marketplace.json` lists this plugin. Consumers add the marketplace via:
+The marketplace lives in a separate repo: `trackness/claude-code-marketplace`. This repo is the plugin source only. Consumers add the marketplace via:
 ```json
 {
   "extraKnownMarketplaces": {
-    "claude-agents": {
+    "trackness": {
       "source": {
         "source": "github",
-        "repo": "trackness/claude-agents"
+        "repo": "trackness/claude-code-marketplace"
       }
     }
   }

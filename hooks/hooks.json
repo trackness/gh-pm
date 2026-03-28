@@ -1,5 +1,5 @@
 {
-  "description": "Enforcement hooks for trackness-agents plugin",
+  "description": "Enforcement hooks for gh-pm plugin",
   "hooks": {
     "PreToolUse": [
       {
