@@ -47,10 +47,10 @@ Extract and hold in context:
    - `/ship` itself does not detect issue numbers. When invoked via `/task`, the `closes #<n>` line is injected into the PR body by the `/task` workflow — `/ship` passes the description through unchanged. For standalone `/ship` invocations, add `closes #<n>` manually to the PR description if needed.
 
 6. **Review:**
-   - Launch the `pr-reviewer` agent using `subagent_type: "trackness-agents:pr-reviewer"` with `isolation: "worktree"` (prevents the reviewer's git operations from modifying the working tree)
+   - Launch the `pr-reviewer` agent using `subagent_type: "gh-pm:pr-reviewer"` with `isolation: "worktree"` (prevents the reviewer's git operations from modifying the working tree)
    - The agent will check architecture, security, performance, error handling, testing, and readability
    - Wait for the agent's assessment: APPROVE, APPROVE WITH COMMENTS, REQUEST CHANGES, or REJECT
-   - **CRITICAL:** NEVER use `superpowers-extended-cc:code-reviewer` or any other agent — ONLY use `subagent_type: "trackness-agents:pr-reviewer"`
+   - **CRITICAL:** NEVER use `superpowers-extended-cc:code-reviewer` or any other agent — ONLY use `subagent_type: "gh-pm:pr-reviewer"`
    - **IMPORTANT:** Do NOT substitute or supplement with the `superpowers-extended-cc:requesting-code-review` skill
 
 7. **Decision:**

@@ -2,7 +2,7 @@
 
 ## Hooks Enforcement
 
-The following rules are enforced by hooks in the trackness-agents plugin. These block tool calls mechanically — they cannot be bypassed.
+The following rules are enforced by hooks in the gh-pm plugin. These block tool calls mechanically — they cannot be bypassed.
 
 | Hook | Enforces |
 |------|----------|
@@ -10,7 +10,7 @@ The following rules are enforced by hooks in the trackness-agents plugin. These 
 | `no-hook-bypass.sh` | No --no-verify on git commands |
 | `enforce-agent-model.sh` | No haiku model on subagents |
 | `enforce-memory-approval.sh` | Memory writes require user approval |
-| `enforce-pr-reviewer.sh` | PR reviews must use trackness-agents:pr-reviewer |
+| `enforce-pr-reviewer.sh` | PR reviews must use gh-pm:pr-reviewer |
 | `doc-staleness-check.sh` | Substantive changes require doc updates |
 
 ---
@@ -53,7 +53,7 @@ feat/, fix/, chore/, refactor/
 
 ### Issue Body Template
 
-Use the standard template from the trackness-agents plugin. All issues created by `/audit`, `/promote`, and `/task` follow this format: Why, Implementation, Files, Testing, Acceptance Criteria.
+Use the standard template from the gh-pm plugin. All issues created by `/audit`, `/promote`, and `/task` follow this format: Why, Implementation, Files, Testing, Acceptance Criteria.
 
 ---
 

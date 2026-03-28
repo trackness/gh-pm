@@ -61,7 +61,7 @@ If this fails (no git repo or no GitHub remote):
 **Step 4: Check plugins**
 
 Check both plugins are installed:
-1. `trackness-agents@claude-agents`
+1. `gh-pm@trackness`
 2. `superpowers-extended-cc@superpowers-extended-cc-marketplace`
 
 For each missing plugin, offer to install:
