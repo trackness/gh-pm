@@ -1,6 +1,6 @@
 {
   "name": "gh-pm",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Project management workflows, enforcement hooks, and PR reviewer agent",
   "author": {
     "name": "trackness",
